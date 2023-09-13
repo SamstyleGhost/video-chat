@@ -31,17 +31,20 @@ io.on('connection', (socket) => {
     socket.join(roomId);
     roomIdtoSockets[`${roomId}`].push(`${peerId}`);
 
-    // The below const is an array of all the users already present in the room (excludes the sender)
-    const usersInCurrentRoom = roomIdtoSockets[`${roomId}`].filter(id => id !== peerId); 
-
-    // The following event is emitted to the sender and gives the data of which users are currently present in the room
-    socket.emit('current-room-users', usersInCurrentRoom);
-
     // The following event is emitted to every user in the room except the sender of the 'join-room' event we are currently in
     // The listener for this event is present on the meetpage
     // It sends the sender's socket Id to all the other people in the room
     socket.broadcast.emit('user-joined-room', peerId);
-  })
+  });
+
+  socket.on('request-current-room-users', (roomId, peerId) => {
+
+    // The below const is an array of all the users already present in the room (excludes the sender)
+    const usersInCurrentRoom = roomIdtoSockets[`${roomId}`]; 
+    
+    // The following event is emitted to everyone in the room and gives the data of which users are currently present in the room
+    io.emit('current-room-users', usersInCurrentRoom);       
+  });
 });
 
 server.listen(PORT)

@@ -13,7 +13,7 @@ export const SocketContextProvider = ({ children }) => {
 
   peer.on('open', id => {
     setPeerId(id);
-    console.log(id);
+    // console.log(id);
   })
 
   return (

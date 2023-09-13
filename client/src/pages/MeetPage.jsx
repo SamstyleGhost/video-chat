@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useSocketContext } from '../context';
 import { Video } from '../components';
@@ -6,17 +6,21 @@ import { Video } from '../components';
 const MeetPage = () => {
 
   const { room } = useParams();
-  const { socket } = useSocketContext();
+  const { socket, peerId } = useSocketContext();
+  const [users, setUsers] = useState([]);
 
   useEffect(() => {
     socket.on('user-joined-room', (newUserId) => {
-      console.log(newUserId);
-    });
-
-    socket.on('current-room-users', usersInCurrentRoom => {
-      console.log("Already in room: ",usersInCurrentRoom);
+      console.log("new User id: ",newUserId);
     });
   }, [socket])
+
+  useEffect(() => {
+    socket.emit('request-current-room-users', room, peerId);
+    socket.on('current-room-users', usersInCurrentRoom => {
+      setUsers(usersInCurrentRoom)
+    });
+  }, [peerId, room, socket])
 
   // useEffect(() => {
   //   const stream = navigator.mediaDevices.getUserMedia({
@@ -28,7 +32,12 @@ const MeetPage = () => {
 
   return (
     <div>
-      {room}
+      <div>{room}</div>
+      {users.map((user, index) => {
+        return (
+          <div key={index}>{index} : {user}</div>
+        );
+      })}
     </div>
   )
 }
