@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 
 const Homepage = () => {
 
-  const { socket } = useSocketContext();
+  const { socket, peerId } = useSocketContext();
   const navigate = useNavigate();
 
   const [room, setRoom] = useState('');
@@ -13,7 +13,7 @@ const Homepage = () => {
     socket.emit('create-room');
     socket.on('room-created', (roomId) => {
       navigate(`/${roomId}`)
-      socket.emit('join-room', roomId);
+      socket.emit('join-room', roomId, peerId);
     });
   };
 
@@ -21,7 +21,7 @@ const Homepage = () => {
     e.preventDefault();
 
     navigate(`/${room}`);
-    socket.emit('join-room', room);
+    socket.emit('join-room', room, peerId);
   };
 
   return (
