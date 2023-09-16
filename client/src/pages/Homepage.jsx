@@ -20,6 +20,7 @@ const Homepage = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
+    console.log("This is the peer: ", peerId);
     navigate(`/${room}`);
     socket.emit('join-room', room, peerId);
   };

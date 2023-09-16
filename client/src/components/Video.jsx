@@ -1,15 +1,24 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
-const Video = ({stream, from}) => {
-
-  const ref = useRef();
-  useEffect(() => {
-    ref.current.srcObject = stream;
-  }, [stream])
+const Video = ({call}) => {
   
+  const ref = useRef();
+  const [stream, setStream] = useState(null);
+
+  useEffect(() => {
+    call.on('stream', userVideoStream => {
+      setStream(userVideoStream);
+      ref.current.srcObject = userVideoStream;
+    })
+  }, [call])
+  
+  useEffect(() => {
+    console.log("User stream: ", stream);
+  }, [stream])
+
   return (
     <div className='m-4 border-2 border-red-600'>
-      <video autoPlay muted ref={ref} width='400px' height='400px'>{from}</video>
+      <video autoPlay muted ref={ref} width='400px' height='400px'></video>
     </div>
   )
 }
