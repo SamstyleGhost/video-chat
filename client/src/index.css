@@ -1,3 +1,21 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=League+Spartan:wght@300;400;500;600;700&display=swap');  
+
+:root {
+  --text: #e4edf1;
+  --background: #020303;
+  --primary: #2c4854;
+  --secondary: #19282f;
+  --accent: #6fb4d1;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'League Spartan', sans-serif;
+  background: var(--background);
+  color: var(--text);
+}

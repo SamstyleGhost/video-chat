@@ -1,10 +1,10 @@
 ### Colors
 
-'text': '#ede8e8',  
-'background': '#1a2535',  
-'primary': '#c1c85f',   
-'secondary': '#054b08',   
-'accent': '#6fb4d1',    
+'text': '#e4edf1',
+'background': '#020303',
+'primary': '#2c4854',
+'secondary': '#19282f',
+'accent': '#6fb4d1',  
 
 ### Font
 
