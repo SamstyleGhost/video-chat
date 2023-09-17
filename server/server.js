@@ -35,8 +35,6 @@ io.on('connection', (socket) => {
     sockettoRoom[peerId] = roomId;
     console.log("Rooms: ",roomIdtoSockets);
 
-    socket.to(peerId).emit("joined-room", roomId);
-
     // The following event is emitted to every user in the room except the sender of the 'join-room' event we are currently in
     // The listener for this event is present on the meetpage
     // It sends the sender's socket Id to all the other people in the room

@@ -1,14 +1,11 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 
 const Video = ({call}) => {
   
   const ref = useRef();
-  const [stream, setStream] = useState(null);
 
   useEffect(() => {
     call.on('stream', userVideoStream => {
-      setStream(userVideoStream);
-      // console.log("User stream", userVideoStream);
       ref.current.srcObject = userVideoStream;
     }, err => {
       console.error("Failed to get stream:", err);
