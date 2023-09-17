@@ -57,7 +57,7 @@ const MeetPage = () => {
       // });
       
       peer.on('call', call => {
-        console.log("Peer: ", peer);
+        // console.log("Peer: ", peer);
         call.answer(stream);
         // call.on('stream', userVideoStream => {
           //   setUserMediaStream(...userMediaStream, userVideoStream);
@@ -87,12 +87,12 @@ const MeetPage = () => {
 
   useEffect(() => {
     console.log(peer.id);
-    console.log("New user: ", newUser);
+    // console.log("New user: ", newUser);
     // console.log("USer Media Streams: ", userMediaStream);
     // userMediaStream.map((userStream, index) => {
     //   return console.log("User: ", index, userStream);
     // })
-  }, [newUser, peer])
+  }, [peer])
   
 
 
@@ -113,6 +113,7 @@ const MeetPage = () => {
         return <Video key={index} call={call}/>
       })}
       {newUser.map((user, index) => {
+        console.log("New users: ", user.peer);
         return (
           <div className='bg-black text-white' key={index}>{index} : {user.peer}</div>
         );
