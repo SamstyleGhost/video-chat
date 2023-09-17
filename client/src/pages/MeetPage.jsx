@@ -7,40 +7,25 @@ const MeetPage = () => {
 
   const { room } = useParams();
   const { socket,  peer } = useSocketContext();
-  const [users, setUsers] = useState({
-    peers: [],
-    usersInCurrentRoom: []
-  });
+  const [users, setUsers] = useState([]);
+  const [newUser, setNewUser] = useState([]);
   const [mediaStream, setMediaStream] = useState(null);
   const [calls, setCalls] = useState([]);
   const [userMediaStream, setUserMediaStream] = useState([]);
 
   const myVideo = useRef();
 
-  const connectToNewUser = useCallback((userId, stream) => {
-    console.log("Connecting to new user");
-    const call = peer.call(userId, stream);
-    setCalls(prevState => [...prevState, call]);
-    // call.on('stream', userVideoStream => {
-    //   console.log("User Video Stream", userVideoStream);
-    //   setUserMediaStream(...userMediaStream, userVideoStream);
-    // });
-    call.on('close', () => {
-      console.log("user left");
-    })
-  }, [peer]);
-
-  useEffect(() => {
-    socket.emit('request-current-room-users', room);
-    socket.on('current-room-users', usersInCurrentRoom => {
-      const otherUsersInCurrentRoom = usersInCurrentRoom.filter((user) => {
-        return user !== peer.id;
-      });
-      setUsers((prevState) => {
-        return { ...prevState, usersInCurrentRoom: otherUsersInCurrentRoom};
-      });
-    });
-  }, [peer, room, socket])
+  // useEffect(() => {
+  //   socket.emit('request-current-room-users', room);
+  //   socket.on('current-room-users', usersInCurrentRoom => {
+  //     const otherUsersInCurrentRoom = usersInCurrentRoom.filter((user) => {
+  //       return user !== peer.id;
+  //     });
+  //     setUsers((prevState) => {
+  //       return { ...prevState, usersInCurrentRoom: otherUsersInCurrentRoom};
+  //     });
+  //   });
+  // }, [peer, room, socket])
 
   useEffect(() => {
     navigator.mediaDevices.getUserMedia({
@@ -50,29 +35,64 @@ const MeetPage = () => {
       setMediaStream(stream);
       myVideo.current.srcObject = stream;
 
-      console.log("Our stream: ", stream);
+      socket.on('joined-room', id => {
+        console.log("I have joined the room ", id);
+      })
+
+      // socket.emit('request-current-room-users', room);
+      // socket.on('current-room-users', usersInCurrentRoom => {
+      //   const otherUsersInCurrentRoom = usersInCurrentRoom.filter((user) => {
+      //     return user !== peer.id;
+      //   });
+      //   setUsers(otherUsersInCurrentRoom);
+      //   // if(otherUsersInCurrentRoom) {
+      //   //   // otherUsersInCurrentRoom.forEach(user => {
+      //   //   //   const call = peer.call(user, stream);
+      //   //   //   setCalls(prevState => [...prevState, call]);
+      //   //   // })
+      //   //   otherUsersInCurrentRoom.forEach(user => {
+      //   //     console.log("otherUsersInCurrentRoom: ", user);
+      //   //   })
+      //   // }
+      // });
+      
       peer.on('call', call => {
         console.log("Peer: ", peer);
         call.answer(stream);
         // call.on('stream', userVideoStream => {
-        //   setUserMediaStream(...userMediaStream, userVideoStream);
-        // })
-        setCalls(prevState => [...prevState, call]);
-      })
-
+          //   setUserMediaStream(...userMediaStream, userVideoStream);
+          // })
+          setCalls(prevState => [...prevState, call]);
+        })
+        
       socket.on('user-joined-room', (newUserId) => {
-        connectToNewUser(newUserId, stream);
+        console.log("Connecting to new user");
+        const call = peer.call(newUserId, stream);
+        setNewUser(prevState => [...prevState, call]);
+        
+        // // call.on('stream', userVideoStream => {
+        // //   console.log("User Video Stream", userVideoStream);
+        // //   setUserMediaStream(...userMediaStream, userVideoStream);
+        // // });
+        call.on('close', () => {
+          console.log("user left");
+        })
       });
     })
-  }, [connectToNewUser, peer, socket, calls])
+
+    return (() => {
+      socket.off('current-room-users');
+    })
+  }, [peer, socket])
 
   useEffect(() => {
-    console.log("Calls: ", calls);
+    console.log(peer.id);
+    console.log("New user: ", newUser);
     // console.log("USer Media Streams: ", userMediaStream);
     // userMediaStream.map((userStream, index) => {
     //   return console.log("User: ", index, userStream);
     // })
-  }, [calls])
+  }, [newUser, peer])
   
 
 
@@ -89,9 +109,12 @@ const MeetPage = () => {
       {calls.map((call, index) => {
         return <Video key={index} call={call}/>
       })}
-      {users.usersInCurrentRoom.map((user, index) => {
+      {newUser.map((call, index) => {
+        return <Video key={index} call={call}/>
+      })}
+      {newUser.map((user, index) => {
         return (
-          <div className='bg-black text-white' key={index}>{index} : {user}</div>
+          <div className='bg-black text-white' key={index}>{index} : {user.peer}</div>
         );
       })}
     </div>
