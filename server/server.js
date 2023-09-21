@@ -44,27 +44,6 @@ io.on('connection', (socket) => {
       socket.to(roomId).broadcast.emit('user-disconnected', peerId)
     })
   });
-  
-  // socket.on('disconnect', () => {
-  //   const room = sockettoRoom[peerId];
-  //   let roomUsers = roomIdtoSockets[room];
-  //   if (roomUsers) {
-  //     roomUsers = roomUsers.filter(id => id !== peerId);
-  //     roomIdtoSockets[room] = roomUsers;
-  //   }
-  // })
-
-
-
-  socket.on('request-current-room-users', (roomId) => {
-
-    // The below const is an array of all the users already present in the room (excludes the sender)
-    const usersInCurrentRoom = roomIdtoSockets[roomId]; 
-    console.log("Current: ", usersInCurrentRoom);
-    
-    // The following event is emitted to everyone in the room and gives the data of which users are currently present in the room
-    io.emit('current-room-users', usersInCurrentRoom);       
-  });
 });
 
 server.listen(PORT)

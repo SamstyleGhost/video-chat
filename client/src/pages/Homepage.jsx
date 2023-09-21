@@ -54,7 +54,7 @@ const Homepage = () => {
               onChange={(e) => handleFormFieldChange('roomId', e.target.value)}
             />
             <div className='flex justify-center mt-10'>
-              <button className='py-2 px-4 font-semibold bg-accent text-text bg-opacity-80 rounded-md' type='submit'>Create / Join Room</button>
+              <button className='py-2 px-4 font-semibold bg-primary border border-primary hover:border-accent text-text bg-opacity-80 rounded-md' type='submit'>Create / Join Room</button>
             </div>
           </form>
           <div className='px-4 text-center mt-8'>

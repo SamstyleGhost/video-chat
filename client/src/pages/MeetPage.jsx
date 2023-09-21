@@ -34,31 +34,23 @@ const MeetPage = () => {
         })
       });
     })
-
-    return (() => {
-      socket.off('current-room-users');
-    })
   }, [peer, socket])
 
   
   return (
     <div>
       <div>{room}</div>
-      <div>
-      <video autoPlay muted ref={myVideo} width='400px' height='400px'></video>
+      <div className='video-grid'>
+        <div>
+          <video autoPlay muted ref={myVideo} width='400px' height='400px'></video>
+        </div>
+        {calls.map((call, index) => {
+          return <Video key={index} call={call}/>
+        })}
+        {newUser.map((call, index) => {
+          return <Video key={index} call={call}/>
+        })}
       </div>
-      {calls.map((call, index) => {
-        return <Video key={index} call={call}/>
-      })}
-      {newUser.map((call, index) => {
-        return <Video key={index} call={call}/>
-      })}
-      {newUser.map((user, index) => {
-        console.log("New users: ", user.peer);
-        return (
-          <div className='bg-black text-white' key={index}>{index} : {user.peer}</div>
-        );
-      })}
     </div>
   )
 }

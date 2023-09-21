@@ -1,0 +1,25 @@
+{
+  "name": "video-chat",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  
+  "scripts": {
+    "homepage": "https://SamstyleGhost.github.io/video-chat",
+    "publish": "gh-pages -d src"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SamstyleGhost/video-chat.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/SamstyleGhost/video-chat/issues"
+  },
+  "homepage": "https://github.com/SamstyleGhost/video-chat#readme",
+  "dependencies": {
+    "gh-pages": "^6.0.0"
+  }
+}
